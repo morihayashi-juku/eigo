@@ -48,6 +48,7 @@ h2{font-family:var(--f-disp);font-size:1.05rem;margin:0 0 8px;letter-spacing:.02
 .lst a{display:flex;justify-content:space-between;gap:8px;align-items:baseline;color:var(--ink);text-decoration:none;padding:6px 8px;border-radius:6px;background:var(--chip)}
 .lst a:hover,.lst a:focus-visible{outline:2px solid var(--mon);outline-offset:0}
 .lst .old a{opacity:.72}
+.lst a.ansl{margin-top:4px;background:transparent;border:1px dashed var(--line);font-size:.85rem}
 .pg{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
 .filters button{font:inherit;font-size:.9rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:5px 14px;border-radius:999px;cursor:pointer}
@@ -93,6 +94,11 @@ h2{font-family:var(--f-disp);font-size:1.05rem;margin:0 0 8px;letter-spacing:.02
       <p class="muted" style="margin:4px 0 0">2人用・月木40分　最終更新 2026年11月2日</p>
     </div>
     <div class="panel now" id="now"></div>
+    <div class="panel">
+      <h2>新しく入った子（中1・1人）</h2>
+      <p class="muted" style="margin:0 0 8px">2人の週の教材とは別の教材。3人称・does も使う。</p>
+      <ul class="lst" id="newkid"></ul>
+    </div>
     <div class="panel">
       <h2>ずっと使うもの</h2>
       <ul class="lst" id="common"></ul>
@@ -167,6 +173,10 @@ const COMMON = [
   ["w4_7_jitsuryoku_shindan.pdf","実力しんだんテスト",1,"単元の終わりごと"],
   ["w4_8_shindan_answers_record.pdf","しんだんのこたえ＋記録表",2,"先生用"],
 ];
+// 新しく入った子の教材（2人とは別）。[問題, 名前, ページ, 説明, こたえ]
+const NEW = [
+  ["n01_hitei_gimon.pdf","① be動詞・一般動詞の否定文と疑問文",6,"見分け → be動詞 → do/does → どっち？ → まちがい直し","n01_hitei_gimon_answers.pdf"],
+];
 const OLD = [
   ["card_v2.pdf","手順カード（①②・「です」チェック）",1],
   ["card_v1.pdf","手順カード（①②・何を・何が）",1],
@@ -175,6 +185,8 @@ const OLD = [
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const li = ([f,name,pg,sub]) => `<li><a href="${P(f)}" target="_blank" rel="noopener"><span>${esc(name)}${sub?`<br><span class="muted">${esc(sub)}</span>`:""}</span><span class="pg">${pg}p</span></a></li>`;
 document.getElementById("common").innerHTML = COMMON.map(li).join("");
+document.getElementById("newkid").innerHTML = NEW.map(([f,name,pg,sub,ans]) => li([f,name,pg,sub]).replace("</li>",
+  ans ? `<a class="ansl" href="${P(ans)}" target="_blank" rel="noopener"><span>こたえ</span><span class="pg">${pg}p</span></a></li>` : "</li>")).join("");
 document.getElementById("old").innerHTML = OLD.map(x => li(x).replace("<li>",'<li class="old">')).join("");
 
 let state = {};

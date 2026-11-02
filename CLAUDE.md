@@ -51,8 +51,12 @@
 | 3 | ① | 一般動詞をもっとふやそう | speak read drink use Japanese book milk water（be は busy を追加） |
 | 4 | ① | まとめ：見分けて読もう | know make clean curry room |
 | 5 | ② | 否定文を作ろう | not don't |
+| 6 | ② | 好き・ほしいに気をつけよう | kind tall cook swim（5週目で「好き・ほしい」に be＋not を使うまちがい → 親切・背が高いとくらべる） |
 
 ## PDFの作り方（目安）
 - A4 縦。HTML を Playwright（Chromium）で PDF にする。日本語は Noto Sans CJK JP、英語は Liberation Sans。
 - 木曜：緑、月曜：青の見出し帯。各ページ右上に 月 日・名前欄。
-- 前の会話で使っていた生成スクリプトは消えてしまったので、次に作る週で生成スクリプトを作り直し、`tools/` に入れて残すこと。
+- 生成スクリプトは `tools/`：共通部品 `eigolib.py`、週ごとのデータ `week6.py`。
+  次の週は `week6.py` をコピーして `week7.py` にし、W・TITLE・WORDS・文のストック・問題の割り当てを書きかえて `python3 tools/week7.py` で pdf/ に出力（`--html` で確認用HTMLも tools/out/ に）。
+  こたえは同じページを赤で描くので、問題とこたえがずれない。新しい英単語は `eigolib.READ` に読みを足す（無いとエラー）。
+  書き出し時にページのはみ出しがあれば「!! はみ出し」と出るので、問題数か余白を調整する。

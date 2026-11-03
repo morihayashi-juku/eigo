@@ -62,7 +62,7 @@ main{padding-top:18px;padding-bottom:40px}
 .now .lab{grid-column:1/-1;color:var(--key);font-weight:700;font-size:.85rem}
 .now .no{font-family:var(--f-disp);font-weight:900;font-size:2.6rem;line-height:1;color:var(--key)}
 .now h1{font-family:var(--f-disp);font-weight:900;font-size:1.45rem;line-height:1.3;margin:0;text-wrap:balance}
-.now .unit{color:var(--muted);font-size:.85rem}
+.now .nu{color:var(--muted);font-size:.85rem}
 .now .acts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 @media (max-width:560px){.now{grid-template-columns:1fr;padding:14px 16px}.now .no{font-size:2rem}.now .acts{margin-top:6px}}
 

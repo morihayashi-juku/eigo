@@ -92,7 +92,7 @@ function renderTrack(track) {
   ${cur ? `<section class="now" aria-label="今の位置">
     <span class="lab">今ここ　${esc(T.longName)}</span>
     <span class="no">${esc(cur.label)}</span>
-    <div><h1>${esc(cur.title)}</h1><div class="unit">${esc(curUnit)}</div></div>
+    <div><h1>${esc(cur.title)}</h1><div class="nu">${esc(curUnit)}</div></div>
     <div class="acts">
       <button type="button" class="btn key" data-act="printset" data-track="${track}" data-set="${esc(cur.id)}">${ICON_PRINT}${esc(cur.label)}をまとめて印刷</button>
       <a class="btn" href="#${track}/${esc(cur.id)}">${esc(cur.label)}の教材を見る</a>

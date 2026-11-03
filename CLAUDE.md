@@ -3,6 +3,16 @@
 このリポジトリは、塾の中1英語のプリント一式と、それを見て・印刷するための先生用ページ（GitHub Pages）です。
 生徒は「2人」（月木40分）と「新しく入った子」（木曜40分＋宿題）の2つの組に分かれていて、教材も別です。
 
+## チャットの役割分担
+このリポジトリには3つのチャットが書きこむ。自分がどれかを最初の指示で確かめ、自分の担当ファイル以外は書きかえない（必要なら先生に伝えて、担当のチャットにたのんでもらう）。
+| チャット | 担当すること | 書きかえるファイル |
+|---|---|---|
+| 2人用 | 2人の週ごとの教材づくり | `pdf/w*`・`data/futari.json`・`tools/week*.py`・`tools/eigolib.py` |
+| 新しく入った子用 | 新しい子の教材・宿題づくり | `pdf/n*`・`data/hitori.json`・`tools/n*.py` |
+| サイト運営用 | 画面・印刷のしくみ、単元の一覧、データの点検、このメモの整理 | `index.html`・`assets/`・`lib/`・`data/common.json`・`tools/check_site.py`・`CLAUDE.md`・`README.md` |
+- サイト運営用のチャットは、教材（PDF や futari.json・hitori.json の中身）を作らない。データの形を変えるときは、2つの JSON とこのメモの説明を一緒に直し、`tools/check_site.py` が通るようにする。
+- どのチャットも、作業の前と push の前に `git pull` する。push のあと1〜2分で https://morihayashi-juku.github.io/eigo/ に反映される。
+
 ## サイトのしくみ（11/3 に作り直し）
 - 画面は3つ：`#futari`（2人）／`#hitori`（新しく入った子）／`#tangen`（単元別）。
 - **教材の一覧は data/ の JSON に書く。`index.html` と `assets/` はさわらなくてよい。**

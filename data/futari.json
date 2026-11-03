@@ -1,0 +1,582 @@
+{
+ "_memo": "2人（月木40分）の教材。新しい週は sets の最後に足し、前の週の cur を消して新しい週に \"cur\": true を付ける。copies は「まとめて印刷」の部数の初期値（0 なら最初はチェックなし）。",
+ "name": "2人",
+ "longName": "2人（中1・月木40分）",
+ "about": [
+  "月曜・木曜の40分。木曜は授業（2人同じ教材）、月曜は自習（A/B別の問題）。",
+  "ふくしゅう小テストは、次の週の木曜のはじめに使う。"
+ ],
+ "checks": [
+  [
+   "print",
+   "印刷した"
+  ],
+  [
+   "thu",
+   "木曜済"
+  ],
+  [
+   "mon",
+   "月曜済"
+  ]
+ ],
+ "common": [
+  {
+   "file": "card_v3.pdf",
+   "title": "手順カード（③ 否定文まで）",
+   "pages": 1,
+   "note": "最新・1人1枚",
+   "copies": 1
+  },
+  {
+   "file": "miss_bunseki_v2.pdf",
+   "title": "まちがい分析シート",
+   "pages": 2,
+   "note": "「です」チェック版",
+   "copies": 1
+  },
+  {
+   "file": "roadmap_v2.1.pdf",
+   "title": "ロードマップ v2.1",
+   "pages": 4,
+   "note": "10/15 版",
+   "copies": 1
+  },
+  {
+   "file": "w4_7_jitsuryoku_shindan.pdf",
+   "title": "実力しんだんテスト",
+   "pages": 1,
+   "note": "単元の終わりごと・1人1枚",
+   "copies": 2
+  },
+  {
+   "file": "w4_8_shindan_answers_record.pdf",
+   "title": "しんだんのこたえ＋記録表",
+   "pages": 2,
+   "note": "先生用",
+   "copies": 1
+  }
+ ],
+ "old": [
+  {
+   "file": "card_v2.pdf",
+   "title": "手順カード（①②・「です」チェック）",
+   "pages": 1,
+   "copies": 1
+  },
+  {
+   "file": "card_v1.pdf",
+   "title": "手順カード（①②・何を・何が）",
+   "pages": 1,
+   "copies": 1
+  },
+  {
+   "file": "miss_bunseki_v1.pdf",
+   "title": "まちがい分析シート（何を・何が）",
+   "pages": 2,
+   "copies": 1
+  }
+ ],
+ "sets": [
+  {
+   "id": "1",
+   "label": "1週目",
+   "units": [
+    "miwake"
+   ],
+   "title": "一般動詞の文を読もう",
+   "words": [
+    "play",
+    "like",
+    "eat",
+    "have",
+    "soccer",
+    "tennis",
+    "music",
+    "ramen"
+   ],
+   "note": "単元①のスタート。月曜は8ページ（前半・後半）。ポイント欄は前の見分け方（何を・何が）。",
+   "groups": [
+    {
+     "kind": "thu",
+     "label": "木曜（授業）",
+     "items": [
+      {
+       "file": "w1_1_Thu_lesson.pdf",
+       "title": "授業プリント",
+       "pages": 4,
+       "note": "2部・2人とも同じ",
+       "copies": 2
+      },
+      {
+       "file": "w1_2_Thu_quiz.pdf",
+       "title": "ラスト5分の小テスト",
+       "pages": 1,
+       "note": "上下2人分を1枚",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "mon",
+     "label": "月曜（自習）",
+     "items": [
+      {
+       "file": "w1_3_Mon_selfstudy_A.pdf",
+       "title": "自習 パターンA",
+       "pages": 8,
+       "note": "前半・後半・80点",
+       "copies": 1
+      },
+      {
+       "file": "w1_4_Mon_selfstudy_B.pdf",
+       "title": "自習 パターンB",
+       "pages": 8,
+       "note": "前半・後半・80点",
+       "copies": 1
+      },
+      {
+       "file": "w1_5_Mon_review_quiz_AB.pdf",
+       "title": "ふくしゅう小テスト",
+       "pages": 1,
+       "note": "上A・下B。2週目の木曜のはじめにやる",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "teacher",
+     "label": "先生用",
+     "items": [
+      {
+       "file": "w1_6_answers.pdf",
+       "title": "こたえ",
+       "pages": 22,
+       "note": "木曜→小テスト→月曜A→月曜B→ふくしゅうの順",
+       "copies": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "2",
+   "label": "2週目",
+   "units": [
+    "miwake"
+   ],
+   "title": "一般動詞をふやそう",
+   "words": [
+    "study",
+    "watch",
+    "want",
+    "play",
+    "English",
+    "TV",
+    "baseball",
+    "bag"
+   ],
+   "note": "月曜は12ページ版（約10分で終わり、まちがいも多かった → 3週目からじっくり版に）。ポイント欄は前の見分け方（何を・何が）。",
+   "groups": [
+    {
+     "kind": "thu",
+     "label": "木曜（授業）",
+     "items": [
+      {
+       "file": "w2_1_Thu_lesson.pdf",
+       "title": "授業プリント",
+       "pages": 4,
+       "note": "2部・2人とも同じ",
+       "copies": 2
+      },
+      {
+       "file": "w2_2_Thu_quiz.pdf",
+       "title": "ラスト5分の小テスト",
+       "pages": 1,
+       "note": "上下2人分を1枚",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "mon",
+     "label": "月曜（自習）",
+     "items": [
+      {
+       "file": "w2_3_Mon_selfstudy_A.pdf",
+       "title": "自習 パターンA",
+       "pages": 12,
+       "note": "3回分＋書く練習・128点",
+       "copies": 1
+      },
+      {
+       "file": "w2_4_Mon_selfstudy_B.pdf",
+       "title": "自習 パターンB",
+       "pages": 12,
+       "note": "3回分＋書く練習・128点",
+       "copies": 1
+      },
+      {
+       "file": "w2_5_Mon_review_quiz_AB.pdf",
+       "title": "ふくしゅう小テスト",
+       "pages": 1,
+       "note": "上A・下B。3週目の木曜のはじめにやる",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "teacher",
+     "label": "先生用",
+     "items": [
+      {
+       "file": "w2_6_answers.pdf",
+       "title": "こたえ",
+       "pages": 30,
+       "note": "木曜→小テスト→月曜A→月曜B→ふくしゅうの順",
+       "copies": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "3",
+   "label": "3週目",
+   "units": [
+    "miwake"
+   ],
+   "title": "一般動詞をもっとふやそう",
+   "words": [
+    "speak",
+    "read",
+    "drink",
+    "use",
+    "Japanese",
+    "book",
+    "milk",
+    "water"
+   ],
+   "note": "ここから見分け方を「です」チェックに変更。月曜は判断を書かせる・途中で丸つけする「じっくり版」に。",
+   "groups": [
+    {
+     "kind": "thu",
+     "label": "木曜（授業）",
+     "items": [
+      {
+       "file": "w3_1_Thu_lesson.pdf",
+       "title": "授業プリント",
+       "pages": 4,
+       "note": "2部・2人とも同じ",
+       "copies": 2
+      },
+      {
+       "file": "w3_2_Thu_quiz.pdf",
+       "title": "ラスト5分の小テスト",
+       "pages": 1,
+       "note": "上下2人分を1枚",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "mon",
+     "label": "月曜（自習）",
+     "items": [
+      {
+       "file": "w3_3_Mon_selfstudy_A.pdf",
+       "title": "自習 パターンA",
+       "pages": 8,
+       "note": "じっくり版・50点",
+       "copies": 1
+      },
+      {
+       "file": "w3_4_Mon_selfstudy_B.pdf",
+       "title": "自習 パターンB",
+       "pages": 8,
+       "note": "じっくり版・50点",
+       "copies": 1
+      },
+      {
+       "file": "w3_5_Mon_review_quiz_AB.pdf",
+       "title": "ふくしゅう小テスト",
+       "pages": 1,
+       "note": "上A・下B。4週目の木曜のはじめにやる",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "teacher",
+     "label": "先生用",
+     "items": [
+      {
+       "file": "w3_6_answers.pdf",
+       "title": "こたえ",
+       "pages": 22,
+       "note": "木曜→小テスト→月曜A→月曜B→ふくしゅうの順",
+       "copies": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "4",
+   "label": "4週目",
+   "units": [
+    "miwake"
+   ],
+   "title": "まとめ：見分けて読もう",
+   "words": [
+    "know",
+    "make",
+    "clean",
+    "curry",
+    "room",
+    "play",
+    "study",
+    "want"
+   ],
+   "note": "単元①のまとめ。ラスト10分は確認テスト（2人とも8点以上で単元②へ）。実力しんだんテストもこの週。",
+   "groups": [
+    {
+     "kind": "thu",
+     "label": "木曜（授業）",
+     "items": [
+      {
+       "file": "w4_1_Thu_lesson.pdf",
+       "title": "授業プリント",
+       "pages": 4,
+       "note": "判断を書く練習・はじめの1分つき",
+       "copies": 2
+      },
+      {
+       "file": "w4_2_Thu_kakunin_test.pdf",
+       "title": "単元①の確認テスト",
+       "pages": 2,
+       "note": "1人1枚・10問・10分",
+       "copies": 2
+      },
+      {
+       "file": "w4_7_jitsuryoku_shindan.pdf",
+       "title": "実力しんだんテスト",
+       "pages": 1,
+       "note": "1人1枚・15分・25点",
+       "copies": 2
+      }
+     ]
+    },
+    {
+     "kind": "mon",
+     "label": "月曜（自習）",
+     "items": [
+      {
+       "file": "w4_3_Mon_selfstudy_A.pdf",
+       "title": "自習 パターンA",
+       "pages": 8,
+       "note": "じっくり版・50点",
+       "copies": 1
+      },
+      {
+       "file": "w4_4_Mon_selfstudy_B.pdf",
+       "title": "自習 パターンB",
+       "pages": 8,
+       "note": "じっくり版・50点",
+       "copies": 1
+      },
+      {
+       "file": "w4_5_Mon_review_quiz_AB.pdf",
+       "title": "ふくしゅう小テスト",
+       "pages": 1,
+       "note": "上A・下B。5週目の木曜のはじめにやる",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "teacher",
+     "label": "先生用",
+     "items": [
+      {
+       "file": "w4_6_answers.pdf",
+       "title": "こたえ",
+       "pages": 22,
+       "note": "木曜→小テスト→月曜A→月曜B→ふくしゅうの順",
+       "copies": 1
+      },
+      {
+       "file": "w4_8_shindan_answers_record.pdf",
+       "title": "しんだんのこたえ＋記録表",
+       "pages": 2,
+       "copies": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "5",
+   "label": "5週目",
+   "units": [
+    "hitei"
+   ],
+   "title": "否定文を作ろう",
+   "words": [
+    "not",
+    "don't",
+    "play",
+    "like",
+    "drink",
+    "speak",
+    "want",
+    "study"
+   ],
+   "note": "否定文の見分け方：最後が「〜ません」→ don't／「好きではありません・ほしくありません」→ don't／それ以外の「ありません」→ be動詞＋not。手順カードを③の版に差し替え。",
+   "groups": [
+    {
+     "kind": "thu",
+     "label": "木曜（授業）",
+     "items": [
+      {
+       "file": "w5_1_Thu_lesson.pdf",
+       "title": "授業プリント",
+       "pages": 4,
+       "note": "2部・2人とも同じ",
+       "copies": 2
+      },
+      {
+       "file": "w5_2_Thu_quiz.pdf",
+       "title": "ラスト5分の小テスト",
+       "pages": 1,
+       "note": "上下2人分を1枚",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "mon",
+     "label": "月曜（自習）",
+     "items": [
+      {
+       "file": "w5_3_Mon_selfstudy_A.pdf",
+       "title": "自習 パターンA",
+       "pages": 8,
+       "note": "じっくり版・50点",
+       "copies": 1
+      },
+      {
+       "file": "w5_4_Mon_selfstudy_B.pdf",
+       "title": "自習 パターンB",
+       "pages": 8,
+       "note": "じっくり版・50点",
+       "copies": 1
+      },
+      {
+       "file": "w5_5_Mon_review_quiz_AB.pdf",
+       "title": "ふくしゅう小テスト",
+       "pages": 1,
+       "note": "上A・下B。6週目の木曜のはじめにやる",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "teacher",
+     "label": "先生用",
+     "items": [
+      {
+       "file": "w5_6_answers.pdf",
+       "title": "こたえ",
+       "pages": 22,
+       "note": "木曜→小テスト→月曜A→月曜B→ふくしゅうの順",
+       "copies": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "6",
+   "label": "6週目",
+   "units": [
+    "hitei"
+   ],
+   "title": "好き・ほしいに気をつけよう",
+   "words": [
+    "kind",
+    "tall",
+    "cook",
+    "swim",
+    "like",
+    "want",
+    "not",
+    "don't"
+   ],
+   "note": "5週目で「好きではありません・ほしくありません」に be＋not を使うまちがいがあったので、同じ「ではありません／くありません」でも be＋not になる 親切（kind）・背が高い（tall）とならべてくらべる週。cook・swim は目的語なしで言える一般動詞。",
+   "groups": [
+    {
+     "kind": "thu",
+     "label": "木曜（授業）",
+     "items": [
+      {
+       "file": "w6_1_Thu_lesson.pdf",
+       "title": "授業プリント",
+       "pages": 4,
+       "note": "2部・2人とも同じ",
+       "copies": 2
+      },
+      {
+       "file": "w6_2_Thu_quiz.pdf",
+       "title": "ラスト5分の小テスト",
+       "pages": 1,
+       "note": "上下2人分を1枚",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "mon",
+     "label": "月曜（自習）",
+     "items": [
+      {
+       "file": "w6_3_Mon_selfstudy_A.pdf",
+       "title": "自習 パターンA",
+       "pages": 8,
+       "note": "じっくり版・50点",
+       "copies": 1
+      },
+      {
+       "file": "w6_4_Mon_selfstudy_B.pdf",
+       "title": "自習 パターンB",
+       "pages": 8,
+       "note": "じっくり版・50点",
+       "copies": 1
+      },
+      {
+       "file": "w6_5_Mon_review_quiz_AB.pdf",
+       "title": "ふくしゅう小テスト",
+       "pages": 1,
+       "note": "上A・下B。7週目の木曜のはじめにやる",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "teacher",
+     "label": "先生用",
+     "items": [
+      {
+       "file": "w6_6_answers.pdf",
+       "title": "こたえ",
+       "pages": 22,
+       "note": "木曜→小テスト→月曜A→月曜B→ふくしゅうの順",
+       "copies": 1
+      }
+     ]
+    }
+   ],
+   "cur": true
+  }
+ ]
+}

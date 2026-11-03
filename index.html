@@ -8,231 +8,68 @@
 <meta name="apple-mobile-web-app-title" content="英語教材棚">
 <title>中1英語 教材棚</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@700;900&family=IBM+Plex+Mono:wght@500&display=swap">
-
-
-<style>
-/* Layout: 時系列の「週の棚」。左に今の位置と共通教材、右に週ごとの箱を新しい順に積む */
-:root{
-  --bg:#eef1f4; --surface:#ffffff; --line:#d5dbe3; --ink:#18212d; --muted:#5a6575;
-  --thu:#2c7a52; --thu-soft:#e3f2ea; --mon:#2a5ca6; --mon-soft:#e4ecf8;
-  --key:#c2410c; --key-soft:#fdeee4; --chip:#f3f5f8; --done:#2c7a52;
-  --f-disp:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
-  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
-  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#12171e; --surface:#1a212b; --line:#2e3846; --ink:#e7ecf2; --muted:#9aa6b5;
-  --thu:#5cc28f; --thu-soft:#173326; --mon:#7aa7ec; --mon-soft:#1a2a44;
-  --key:#f59e6b; --key-soft:#3a2418; --chip:#222b37; --done:#5cc28f; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#12171e; --surface:#1a212b; --line:#2e3846; --ink:#e7ecf2; --muted:#9aa6b5;
-  --thu:#5cc28f; --thu-soft:#173326; --mon:#7aa7ec; --mon-soft:#1a2a44;
-  --key:#f59e6b; --key-soft:#3a2418; --chip:#222b37; --done:#5cc28f; color-scheme:dark}
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
-.wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}
-@media (max-width:900px){.wrap{grid-template-columns:1fr}}
-h1{font-family:var(--f-disp);font-weight:900;font-size:1.75rem;margin:0;line-height:1.2;text-wrap:balance}
-h2{font-family:var(--f-disp);font-size:1.05rem;margin:0 0 8px;letter-spacing:.02em}
-.side{display:grid;gap:16px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
-@media (max-width:900px){.side{position:static}}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
-.now{border:2px solid var(--key);background:var(--key-soft)}
-.now .big{font-family:var(--f-disp);font-weight:900;font-size:1.35rem;line-height:1.3}
-.muted{color:var(--muted);font-size:.85rem}
-.lst{list-style:none;margin:0;padding:0;display:grid;gap:6px}
-.lst a{display:flex;justify-content:space-between;gap:8px;align-items:baseline;color:var(--ink);text-decoration:none;padding:6px 8px;border-radius:6px;background:var(--chip)}
-.lst a:hover,.lst a:focus-visible{outline:2px solid var(--mon);outline-offset:0}
-.lst .old a{opacity:.72}
-.lst a.ansl{margin-top:4px;background:transparent;border:1px dashed var(--line);font-size:.85rem}
-.pg{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
-.filters button{font:inherit;font-size:.9rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:5px 14px;border-radius:999px;cursor:pointer}
-.filters button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
-.filters button:focus-visible{outline:2px solid var(--mon);outline-offset:2px}
-.weeks{display:grid;gap:16px;margin-top:12px}
-.week{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:12px;min-width:0}
-.week.cur{border:2px solid var(--key)}
-.whead{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
-.wno{font-family:var(--f-disp);font-weight:900;font-size:1.5rem;font-variant-numeric:tabular-nums}
-.wunit{font-size:.82rem;color:var(--muted);letter-spacing:.04em}
-.wtitle{font-family:var(--f-disp);font-weight:700;font-size:1.1rem;flex-basis:100%}
-.tag{font-size:.75rem;padding:1px 8px;border-radius:999px;background:var(--key);color:var(--surface);font-weight:700}
-.words{display:flex;flex-wrap:wrap;gap:4px}
-.words span{font-family:var(--f-mono);font-size:.8rem;background:var(--chip);border-radius:4px;padding:1px 7px}
-.note{font-size:.88rem;color:var(--muted);margin:0}
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:620px){.cols{grid-template-columns:1fr}}
-.day{border-radius:8px;padding:10px 12px;display:grid;gap:6px;min-width:0;align-content:start}
-.day.thu{background:var(--thu-soft)} .day.mon{background:var(--mon-soft)}
-.day h3{margin:0;font-size:.85rem;letter-spacing:.06em}
-.day.thu h3{color:var(--thu)} .day.mon h3{color:var(--mon)}
-.f{display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:baseline;text-decoration:none;color:var(--ink);background:var(--surface);border-radius:6px;padding:6px 9px;border:1px solid transparent}
-.f:hover,.f:focus-visible{border-color:currentColor;outline:none}
-.f .nm{font-weight:700;font-size:.92rem}
-.f .hint{grid-column:1/-1;font-size:.76rem;color:var(--muted)}
-.foot{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;border-top:1px dashed var(--line);padding-top:10px}
-.foot a.ans{font-size:.88rem;color:var(--ink)}
-.chk{display:flex;flex-wrap:wrap;gap:12px;margin-left:auto}
-.chk label{display:flex;gap:5px;align-items:center;font-size:.85rem;cursor:pointer}
-.chk input{accent-color:var(--done);width:16px;height:16px}
-.print td,.print th{border-bottom:1px solid var(--line);padding:4px 2px;font-size:.85rem;text-align:left}
-.print{width:100%;border-collapse:collapse}
-.print td:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-@media (prefers-reduced-motion:no-preference){.f,.lst a{transition:border-color .15s}}
-</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@700;900&display=swap">
+<link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
-<div class="wrap">
-  <aside class="side">
-    <div>
-      <h1>中1英語 教材棚</h1>
-      <p class="muted" style="margin:4px 0 0">2人用・月木40分　最終更新 2026年11月2日</p>
-    </div>
-    <div class="panel now" id="now"></div>
-    <div class="panel">
-      <h2>新しく入った子（中1・1人）</h2>
-      <p class="muted" style="margin:0 0 8px">木曜40分・週1回＋毎日の宿題。2人とは別の進度（3人称・does も使う）。</p>
-      <ul class="lst" id="newkid"></ul>
-    </div>
-    <div class="panel">
-      <h2>ずっと使うもの</h2>
-      <ul class="lst" id="common"></ul>
-    </div>
-    <div class="panel">
-      <h2>1週間の印刷の目安</h2>
-      <table class="print">
-        <tr><td>木曜 授業プリント</td><td>2部</td></tr>
-        <tr><td>木曜 小テスト（上下2人分）</td><td>1枚</td></tr>
-        <tr><td>月曜 自習 A・B</td><td>各1部</td></tr>
-        <tr><td>月曜のふくしゅう小テスト</td><td>1枚</td></tr>
-        <tr><td>こたえ（先生用）</td><td>1部</td></tr>
-      </table>
-      <p class="muted" style="margin:8px 0 0">ふくしゅう小テストは、次の週の木曜のはじめに使う。</p>
-    </div>
-    <div class="panel">
-      <h2>過去の版</h2>
-      <ul class="lst" id="old"></ul>
-    </div>
-  </aside>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#futari">中1英語 教材棚</a>
+    <nav class="tabs" aria-label="画面の切りかえ">
+      <a href="#futari" data-tab="futari">2人</a>
+      <a href="#hitori" data-tab="hitori">新しく入った子</a>
+      <a href="#tangen" data-tab="tangen">単元別</a>
+    </nav>
+  </div>
+</header>
 
-  <main style="min-width:0">
-    <div class="filters" role="group" aria-label="単元でしぼる">
-      <button type="button" id="f-all" data-f="all" aria-pressed="true">すべて</button>
-      <button type="button" id="f-u1" data-f="1" aria-pressed="false">単元① 見分け</button>
-      <button type="button" id="f-u2" data-f="2" aria-pressed="false">単元② 否定文</button>
-      <button type="button" id="f-todo" data-f="todo" aria-pressed="false">まだ終わっていない週</button>
+<main id="app" class="wrap" aria-live="polite"><p class="muted">読みこみ中…</p></main>
+
+<footer class="foot wrap"><span id="updated"></span>　先生用のページです（生徒には見せない）。</footer>
+
+<!-- ページ内ビューア -->
+<dialog id="viewer" aria-labelledby="v-title">
+  <div class="v-bar">
+    <div class="v-name"><b id="v-title"></b><span id="v-pages" class="muted"></span></div>
+    <div class="v-btns">
+      <button type="button" class="btn primary" id="v-print">印刷</button>
+      <a class="btn" id="v-open" target="_blank" rel="noopener">別のタブで開く</a>
+      <button type="button" class="btn icon" id="v-close" aria-label="閉じる">✕</button>
     </div>
-    <div class="weeks" id="weeks"></div>
-  </main>
-</div>
+  </div>
+  <div class="v-body" id="v-body"></div>
+</dialog>
 
-<script>
-const U = {1:"単元① 一般動詞とbe動詞の見分け", 2:"単元② 否定文（〜ではない・〜しない）"};
-const P = f => "pdf/" + f;
-const W = [
-  {n:6, u:2, cur:true, title:"好き・ほしいに気をつけよう", words:["kind","tall","cook","swim","like","want","not","don't"],
-   note:"5週目で「好きではありません・ほしくありません」に be＋not を使うまちがいがあったので、同じ「ではありません／くありません」でも be＋not になる 親切（kind）・背が高い（tall）とならべてくらべる週。cook・swim は目的語なしで言える一般動詞。",
-   thu:[["w6_1_Thu_lesson.pdf","授業プリント",4,"2部・2人とも同じ"],["w6_2_Thu_quiz.pdf","ラスト5分の小テスト",1,"上下2人分を1枚"]],
-   mon:[["w6_3_Mon_selfstudy_A.pdf","自習 パターンA",8,"じっくり版・50点"],["w6_4_Mon_selfstudy_B.pdf","自習 パターンB",8,"じっくり版・50点"],["w6_5_Mon_review_quiz_AB.pdf","ふくしゅう小テスト",1,"7週目の木曜のはじめに"]],
-   ans:"w6_6_answers.pdf", ansp:22},
-  {n:5, u:2, title:"否定文を作ろう", words:["not","don't","play","like","drink","speak","want","study"],
-   note:"否定文の見分け方：最後が「〜ません」→ don't／「好きではありません・ほしくありません」→ don't／それ以外の「ありません」→ be動詞＋not。手順カードを③の版に差し替え。",
-   thu:[["w5_1_Thu_lesson.pdf","授業プリント",4,"2部・2人とも同じ"],["w5_2_Thu_quiz.pdf","ラスト5分の小テスト",1,"上下2人分を1枚"]],
-   mon:[["w5_3_Mon_selfstudy_A.pdf","自習 パターンA",8,"じっくり版・50点"],["w5_4_Mon_selfstudy_B.pdf","自習 パターンB",8,"じっくり版・50点"],["w5_5_Mon_review_quiz_AB.pdf","ふくしゅう小テスト",1,"6週目の木曜のはじめに"]],
-   ans:"w5_6_answers.pdf", ansp:22},
-  {n:4, u:1, title:"まとめ：見分けて読もう", words:["know","make","clean","curry","room","play","study","want"],
-   note:"単元①のまとめ。ラスト10分は確認テスト（2人とも8点以上で単元②へ）。実力しんだんテストもこの週。",
-   thu:[["w4_1_Thu_lesson.pdf","授業プリント",4,"判断を書く練習・はじめの1分つき"],["w4_2_Thu_kakunin_test.pdf","単元①の確認テスト",2,"1人1枚・10問・10分"],["w4_7_jitsuryoku_shindan.pdf","実力しんだんテスト",1,"1人1枚・15分・25点"]],
-   mon:[["w4_3_Mon_selfstudy_A.pdf","自習 パターンA",8,"じっくり版・50点"],["w4_4_Mon_selfstudy_B.pdf","自習 パターンB",8,"じっくり版・50点"],["w4_5_Mon_review_quiz_AB.pdf","ふくしゅう小テスト",1,"5週目の木曜のはじめに"]],
-   ans:"w4_6_answers.pdf", ansp:22, extra:["w4_8_shindan_answers_record.pdf","しんだんのこたえ＋記録表",2]},
-  {n:3, u:1, title:"一般動詞をもっとふやそう", words:["speak","read","drink","use","Japanese","book","milk","water"],
-   note:"ここから見分け方を「です」チェックに変更。月曜は判断を書かせる・途中で丸つけする「じっくり版」に。",
-   thu:[["w3_1_Thu_lesson.pdf","授業プリント",4,"2部・2人とも同じ"],["w3_2_Thu_quiz.pdf","ラスト5分の小テスト",1,"上下2人分を1枚"]],
-   mon:[["w3_3_Mon_selfstudy_A.pdf","自習 パターンA",8,"じっくり版・50点"],["w3_4_Mon_selfstudy_B.pdf","自習 パターンB",8,"じっくり版・50点"],["w3_5_Mon_review_quiz_AB.pdf","ふくしゅう小テスト",1,"4週目の木曜のはじめに"]],
-   ans:"w3_6_answers.pdf", ansp:22},
-  {n:2, u:1, title:"一般動詞をふやそう", words:["study","watch","want","play","English","TV","baseball","bag"],
-   note:"月曜は12ページ版（約10分で終わり、まちがいも多かった → 3週目からじっくり版に）。ポイント欄は前の見分け方（何を・何が）。",
-   thu:[["w2_1_Thu_lesson.pdf","授業プリント",4,"2部・2人とも同じ"],["w2_2_Thu_quiz.pdf","ラスト5分の小テスト",1,"上下2人分を1枚"]],
-   mon:[["w2_3_Mon_selfstudy_A.pdf","自習 パターンA",12,"3回分＋書く練習・128点"],["w2_4_Mon_selfstudy_B.pdf","自習 パターンB",12,"3回分＋書く練習・128点"],["w2_5_Mon_review_quiz_AB.pdf","ふくしゅう小テスト",1,"3週目の木曜のはじめに"]],
-   ans:"w2_6_answers.pdf", ansp:30},
-  {n:1, u:1, title:"一般動詞の文を読もう", words:["play","like","eat","have","soccer","tennis","music","ramen"],
-   note:"単元①のスタート。月曜は8ページ（前半・後半）。ポイント欄は前の見分け方（何を・何が）。",
-   thu:[["w1_1_Thu_lesson.pdf","授業プリント",4,"2部・2人とも同じ"],["w1_2_Thu_quiz.pdf","ラスト5分の小テスト",1,"上下2人分を1枚"]],
-   mon:[["w1_3_Mon_selfstudy_A.pdf","自習 パターンA",8,"前半・後半・80点"],["w1_4_Mon_selfstudy_B.pdf","自習 パターンB",8,"前半・後半・80点"],["w1_5_Mon_review_quiz_AB.pdf","ふくしゅう小テスト",1,"2週目の木曜のはじめに"]],
-   ans:"w1_6_answers.pdf", ansp:22},
-];
-const COMMON = [
-  ["roadmap_v2.1.pdf","ロードマップ v2.1",4,"10/15 版"],
-  ["card_v3.pdf","手順カード（③ 否定文まで）",1,"最新・1人1枚"],
-  ["miss_bunseki_v2.pdf","まちがい分析シート",2,"「です」チェック版"],
-  ["w4_7_jitsuryoku_shindan.pdf","実力しんだんテスト",1,"単元の終わりごと"],
-  ["w4_8_shindan_answers_record.pdf","しんだんのこたえ＋記録表",2,"先生用"],
-];
-// 新しく入った子の教材（2人とは別）。[問題, 名前, ページ, 説明, こたえ]
-const NEW = [
-  ["n01_hitei_gimon.pdf","① be動詞・一般動詞の否定文と疑問文",6,"見分け → be動詞 → do/does → どっち？ → まちがい直し","n01_hitei_gimon_answers.pdf"],
-  ["n01_homework.pdf","① の宿題（金〜水の6日分）",3,"自学ノートに1日半ページ・こたえは本人に渡して毎日丸つけ","n01_homework_answers.pdf"],
-];
-const OLD = [
-  ["card_v2.pdf","手順カード（①②・「です」チェック）",1],
-  ["card_v1.pdf","手順カード（①②・何を・何が）",1],
-  ["miss_bunseki_v1.pdf","まちがい分析シート（何を・何が）",2],
-];
-const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const li = ([f,name,pg,sub]) => `<li><a href="${P(f)}" target="_blank" rel="noopener"><span>${esc(name)}${sub?`<br><span class="muted">${esc(sub)}</span>`:""}</span><span class="pg">${pg}p</span></a></li>`;
-document.getElementById("common").innerHTML = COMMON.map(li).join("");
-document.getElementById("newkid").innerHTML = NEW.map(([f,name,pg,sub,ans]) => li([f,name,pg,sub]).replace("</li>",
-  ans ? `<a class="ansl" href="${P(ans)}" target="_blank" rel="noopener"><span>こたえ</span><span class="pg">${pg}p</span></a></li>` : "</li>")).join("");
-document.getElementById("old").innerHTML = OLD.map(x => li(x).replace("<li>",'<li class="old">')).join("");
+<!-- まとめて印刷 -->
+<dialog id="setprint" aria-labelledby="sp-title">
+  <form method="dialog" class="sp">
+    <h2 id="sp-title"></h2>
+    <p class="muted" id="sp-sub">印刷するものと部数をえらんでください。</p>
+    <ul class="sp-list" id="sp-list"></ul>
+    <div class="sp-foot">
+      <span id="sp-total"></span>
+      <button type="button" class="btn" value="cancel" id="sp-cancel">やめる</button>
+      <button type="button" class="btn primary" id="sp-go">印刷する</button>
+    </div>
+  </form>
+</dialog>
 
-let state = {};
-try { state = JSON.parse(localStorage.getItem("eigo-shelf") || "{}") || {}; } catch(e) { state = {}; }
-const save = () => { try { localStorage.setItem("eigo-shelf", JSON.stringify(state)); } catch(e) {} };
-const CHECKS = [["print","印刷した"],["thu","木曜済"],["mon","月曜済"]];
-const done = w => CHECKS.every(([k]) => state[w.n+"-"+k]);
+<!-- 印刷の準備中 -->
+<dialog id="progress" aria-labelledby="pg-title">
+  <div class="pg">
+    <b id="pg-title">印刷の準備をしています</b>
+    <div class="bar"><span id="pg-bar"></span></div>
+    <p class="muted" id="pg-text"></p>
+    <div class="pg-btns" id="pg-btns" hidden>
+      <button type="button" class="btn primary" id="pg-again">もう一度印刷画面を出す</button>
+      <button type="button" class="btn" id="pg-close">閉じる</button>
+    </div>
+  </div>
+</dialog>
 
-const fileLink = ([f,name,pg,hint]) => `<a class="f" href="${P(f)}" target="_blank" rel="noopener"><span class="nm">${esc(name)}</span><span class="pg">${pg}p</span><span class="hint">${esc(hint)}</span></a>`;
-function render(filter){
-  const box = document.getElementById("weeks");
-  box.innerHTML = W.filter(w => filter==="all" || (filter==="todo" ? !done(w) : String(w.u)===filter)).map(w => `
-    <article class="week${w.cur?" cur":""}" id="w${w.n}">
-      <div class="whead"><span class="wno">${w.n}週目</span><span class="wunit">${esc(U[w.u])}</span>${w.cur?'<span class="tag">今ここ</span>':""}
-        <span class="wtitle">${esc(w.title)}</span></div>
-      <div class="words" aria-label="単語">${w.words.map(x=>`<span>${esc(x)}</span>`).join("")}</div>
-      <p class="note">${esc(w.note)}</p>
-      <div class="cols">
-        <div class="day thu"><h3>木曜（授業）</h3>${w.thu.map(fileLink).join("")}</div>
-        <div class="day mon"><h3>月曜（自習）</h3>${w.mon.map(fileLink).join("")}</div>
-      </div>
-      <div class="foot">
-        <a class="ans" href="${P(w.ans)}" target="_blank" rel="noopener">こたえ（先生用）<span class="pg"> ${w.ansp}p</span></a>
-        ${w.extra?`<a class="ans" href="${P(w.extra[0])}" target="_blank" rel="noopener">${esc(w.extra[1])}<span class="pg"> ${w.extra[2]}p</span></a>`:""}
-        <div class="chk">${CHECKS.map(([k,l])=>`<label><input type="checkbox" id="c${w.n}-${k}" data-k="${w.n}-${k}" ${state[w.n+"-"+k]?"checked":""}>${l}</label>`).join("")}</div>
-      </div>
-    </article>`).join("") || '<p class="muted">この条件の週はありません。</p>';
-}
-const cur = W.find(w => w.cur);
-document.getElementById("now").innerHTML = `<div class="muted">今の位置</div><div class="big">${cur.n}週目　${esc(cur.title)}</div><div class="muted">${esc(U[cur.u])}</div><a href="#w${cur.n}" style="color:var(--key);font-weight:700;font-size:.9rem">この週の教材へ</a>`;
+<div id="print-root" aria-hidden="true"></div>
 
-let filter = "all";
-try { filter = localStorage.getItem("eigo-filter") || "all"; } catch(e) {}
-const setFilter = f => {
-  filter = f; document.querySelectorAll(".filters button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.f===f)));
-  try { localStorage.setItem("eigo-filter", f); } catch(e) {}
-  render(f);
-};
-document.querySelector(".filters").addEventListener("click", e => { const b = e.target.closest("button"); if (b) setFilter(b.dataset.f); });
-document.getElementById("weeks").addEventListener("change", e => {
-  const k = e.target.dataset.k; if (!k) return; state[k] = e.target.checked; save();
-  if (filter==="todo") render(filter);
-});
-setFilter(filter);
-</script>
-
+<script src="lib/pdfjs/pdf.min.js"></script>
+<script src="assets/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,86 @@
+{
+ "_memo": "新しく入った子（中1・1人・木曜40分＋毎日の宿題）の教材。新しい教材は sets の最後に足し、前の cur を消して新しいほうに \"cur\": true を付ける。copies は「まとめて印刷」の部数の初期値。",
+ "name": "新しく入った子",
+ "longName": "新しく入った子（中1・1人）",
+ "about": [
+  "木曜40分・週1回。2人より理解力が高めなので別の進度（3人称・does も使う）。",
+  "宿題は木曜のあと金〜水の6日分。自学ノートに1日半ページ、本人がこたえを見て毎日丸つけ。"
+ ],
+ "checks": [
+  [
+   "print",
+   "印刷した"
+  ],
+  [
+   "thu",
+   "授業済"
+  ],
+  [
+   "hw",
+   "宿題チェック済"
+  ]
+ ],
+ "common": [],
+ "old": [],
+ "sets": [
+  {
+   "id": "n01",
+   "label": "①",
+   "units": [
+    "miwake",
+    "hitei",
+    "gimon"
+   ],
+   "title": "be動詞・一般動詞の否定文と疑問文",
+   "cur": true,
+   "note": "見分け → be動詞の否定・疑問 → do/does → どっち？否定 → どっち？疑問 → まちがい直し の6ページ。",
+   "groups": [
+    {
+     "kind": "thu",
+     "label": "木曜（授業）",
+     "items": [
+      {
+       "file": "n01_hitei_gimon.pdf",
+       "title": "授業プリント",
+       "pages": 6,
+       "note": "否定・疑問 1〜6",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "hw",
+     "label": "宿題（金〜水）",
+     "items": [
+      {
+       "file": "n01_homework.pdf",
+       "title": "宿題（6日分）",
+       "pages": 3,
+       "note": "A4 1枚に2日分。答えは自学ノートに",
+       "copies": 1
+      },
+      {
+       "file": "n01_homework_answers.pdf",
+       "title": "宿題のこたえ",
+       "pages": 3,
+       "note": "本人に渡して毎日丸つけ",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "teacher",
+     "label": "先生用",
+     "items": [
+      {
+       "file": "n01_hitei_gimon_answers.pdf",
+       "title": "授業プリントのこたえ",
+       "pages": 6,
+       "copies": 1
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

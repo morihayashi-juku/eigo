@@ -125,14 +125,17 @@ main{padding-top:18px;padding-bottom:40px}
 .tile .open:hover .thumb{border-color:var(--ink)}
 .tile .t{font-weight:700;font-size:.84rem;line-height:1.35}
 .tile .n{font-size:.74rem;color:var(--muted);line-height:1.35}
-.tile .pr{justify-self:start;padding:3px 10px;font-size:.78rem}
+.tacts{display:flex;gap:4px;flex-wrap:wrap}
+.tile .pr,.tile .dl{padding:3px 8px;font-size:.78rem;gap:4px;text-decoration:none}
+.tile .dl svg,.tile .pr svg{width:14px;height:14px}
 @media (max-width:480px){
   .tiles{gap:8px}
   .tile,.thumb{width:86px}
   .group{flex:1 1 100%;padding:10px}
   .sbody{padding:0 12px 12px}
   .set > summary{padding:12px}
-  .tile .pr{padding:3px 8px}
+  .tile .pr,.tile .dl{padding:3px 5px;font-size:.72rem;gap:2px}
+  .tile .pr svg{display:none}
 }
 
 .sfoot{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;border-top:1px dashed var(--line);padding-top:10px}
@@ -149,6 +152,8 @@ main{padding-top:18px;padding-bottom:40px}
 .rows .r b{font-size:.88rem;font-weight:700}
 .rows .r small{color:var(--muted);font-size:.76rem}
 .rows .p{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:0 9px;cursor:pointer;display:flex;align-items:center}
+.rows .p{color:var(--ink);text-decoration:none}
+.rows .p:hover{border-color:var(--ink)}
 .rows .p svg{width:16px;height:16px}
 .rows.old .r{opacity:.75}
 
@@ -176,7 +181,9 @@ dialog::backdrop{background:rgba(10,14,20,.55)}
 .v-bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);
   padding-top:max(10px,env(safe-area-inset-top,0px))}
 .v-name{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;min-width:0}
-.v-btns{display:flex;gap:8px}
+.v-btns{display:flex;flex-wrap:wrap;gap:8px}
+.v-btns a.btn{text-decoration:none}
+@media (max-width:480px){#v-open{display:none}}
 .v-body{flex:1;overflow:auto;background:var(--desk);padding:16px;display:grid;gap:16px;justify-items:center;align-content:start}
 .v-page{width:min(820px,100%);aspect-ratio:210/297;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);position:relative}
 .v-page canvas{width:100%;height:100%;display:block}

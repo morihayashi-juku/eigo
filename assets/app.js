@@ -10,7 +10,7 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const P = f => "pdf/" + f;
 const ICON_PRINT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2"/><rect x="6" y="14" width="12" height="7"/></svg>';
 const ICON_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>';
-const dlLink = (it, cls, inner) => `<a class="${cls}" href="${esc(P(it.file))}" download="${esc(it.file)}" title="PDFをダウンロード" aria-label="${esc(it.title)}のPDFをダウンロード">${inner}</a>`;
+const dlLink = (it, cls, inner) => `<a class="${cls}" href="${esc(P(it.file))}" download="${esc(it.file)}" data-dl="${esc(it.file)}" title="PDFをダウンロード" aria-label="${esc(it.title)}のPDFをダウンロード">${inner}</a>`;
 const ICON_CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 
 let D = null;                         // {common, futari, hitori}
@@ -206,7 +206,7 @@ async function openViewer(file) {
   $("#v-title").textContent = it.title;
   $("#v-pages").textContent = "";
   $("#v-open").href = P(file);
-  $("#v-dl").href = P(file); $("#v-dl").setAttribute("download", file);
+  $("#v-dl").href = P(file); $("#v-dl").setAttribute("download", file); $("#v-dl").dataset.dl = file;
   const body = $("#v-body");
   body.innerHTML = "";
   if (!viewer.open) viewer.showModal();
@@ -285,6 +285,8 @@ $("#sp-go").addEventListener("click", () => {
 const pageImg = new Map();                    // "file#n" → blob URL（一度描いたら使い回す）
 const progress = $("#progress");
 let printing = false;
+let lastJobs = [];
+const TOUCH = navigator.maxTouchPoints > 1;     // iPad・iPhone など
 async function renderForPrint(file, n) {
   const k = file + "#" + n;
   if (pageImg.has(k)) return pageImg.get(k);
@@ -299,7 +301,7 @@ async function renderForPrint(file, n) {
 }
 async function printJob(title, jobs) {
   if (printing || !jobs.length) return;
-  printing = true;
+  printing = true; lastJobs = jobs;
   if (viewer.open) viewer.close();
   $("#pg-title").textContent = "印刷の準備をしています";
   $("#pg-btns").hidden = true; $("#pg-again").hidden = false; $("#pg-bar").style.width = "0"; $("#pg-text").textContent = "";
@@ -326,12 +328,11 @@ async function printJob(title, jobs) {
     const imgs = urls.map(u => { const d = document.createElement("div"); d.className = "sheet"; const im = new Image(); im.src = u; im.alt = ""; d.append(im); frag.append(d); return im; });
     root.append(frag);
     await Promise.all(imgs.map(im => im.decode ? im.decode().catch(() => {}) : null));
-    $("#pg-title").textContent = "印刷画面を開きます";
-    $("#pg-text").textContent = `全部で ${sheets} ページ。部数は印刷画面ではなく、ここでえらんだ部数になっています。`;
     progress.close();
     doPrint(title);
-    $("#pg-title").textContent = "印刷画面を開きました";
-    $("#pg-btns").hidden = false;
+    $("#pg-title").textContent = "印刷の用意ができました";
+    $("#pg-text").textContent = `全部で ${sheets} ページ。印刷画面が出ないとき（iPad など）は、下の「${TOUCH ? "PDFで印刷" : "印刷画面を開く"}」を押してください。${TOUCH ? "出てきた画面で「プリント」を選びます。" : ""}部数は印刷画面ではなく、ここでえらんだ部数になっています。`;
+    $("#pg-btns").hidden = false; $("#pg-share").hidden = !TOUCH;
     progress.showModal();
   } catch (e) {
     $("#pg-title").textContent = "印刷の準備ができませんでした";
@@ -344,9 +345,43 @@ function doPrint(title) {
   document.title = title || old;              // 「PDFに保存」のときのファイル名になる
   try { window.print(); } finally { setTimeout(() => { document.title = old; }, 500); }
 }
-$("#pg-again").addEventListener("click", () => { progress.close(); doPrint(); progress.showModal(); });
+$("#pg-again").addEventListener("click", () => { progress.close(); doPrint(); setTimeout(() => { if (!progress.open) progress.showModal(); }, 1500); });
+/* iPad で window.print() が効かないとき：PDF そのものを共有画面に出し、そこから「プリント」を選ぶ */
+$("#pg-share").addEventListener("click", async () => {
+  const btn = $("#pg-share"), old = btn.textContent; btn.disabled = true; btn.textContent = "PDFを用意しています…";
+  try {
+    const files = [];
+    for (const j of lastJobs) {
+      const blob = await (await fetch(P(j.file))).blob();
+      for (let c = 0; c < j.copies; c++) files.push(new File([blob], (c ? c + "_" : "") + j.file, {type: "application/pdf"}));
+    }
+    if (navigator.canShare && navigator.canShare({files})) await navigator.share({files});
+    else if (lastJobs[0]) window.open(P(lastJobs[0].file), "_blank");
+  } catch (e) { /* 共有をやめたとき */ }
+  btn.disabled = false; btn.textContent = old;
+});
 $("#pg-close").addEventListener("click", () => { progress.close(); $("#pg-again").hidden = false; });
 window.__eigoPrintJob = printJob;             // 動作確認用
+
+/* ------------------------------------------------------------ PDF の保存
+   iPad・iPhone は、ふつうのダウンロードだと PDF を開くだけで保存されない。
+   タッチ端末では「共有」の画面（ファイルに保存・AirDrop など）を出して、そこから保存できるようにする。 */
+async function savePdf(file) {
+  try {
+    if (TOUCH && navigator.canShare && navigator.share) {
+      const blob = await (await fetch(P(file))).blob();
+      const f = new File([blob], file, {type: "application/pdf"});
+      if (navigator.canShare({files: [f]})) { await navigator.share({files: [f]}); return true; }
+    }
+  } catch (e) { if (e && e.name === "AbortError") return true; }   // 共有をやめたときは何もしない
+  return false;                                                      // 使えなければふつうのダウンロード
+}
+document.addEventListener("click", async e => {
+  const a = e.target.closest("a[data-dl]");
+  if (!a || !a.dataset.dl) return;
+  e.preventDefault();
+  if (!(await savePdf(a.dataset.dl))) { const t = document.createElement("a"); t.href = a.href; t.download = a.dataset.dl; document.body.append(t); t.click(); t.remove(); }
+});
 
 /* ------------------------------------------------------------ 操作 */
 document.addEventListener("click", e => {

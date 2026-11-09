@@ -9,7 +9,7 @@
 <title>中1英語 教材棚</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@700;900&display=swap">
-<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/app.css?v=20261109a">
 </head>
 <body>
 <header class="top">
@@ -33,7 +33,7 @@
     <div class="v-name"><b id="v-title"></b><span id="v-pages" class="muted"></span></div>
     <div class="v-btns">
       <button type="button" class="btn primary" id="v-print">印刷</button>
-      <a class="btn" id="v-dl" title="PDFをダウンロード"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>ダウンロード</a>
+      <a class="btn" id="v-dl" data-dl="" title="PDFをダウンロード"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>ダウンロード</a>
       <a class="btn" id="v-open" target="_blank" rel="noopener">別のタブで開く</a>
       <button type="button" class="btn icon" id="v-close" aria-label="閉じる">✕</button>
     </div>
@@ -62,7 +62,8 @@
     <div class="bar"><span id="pg-bar"></span></div>
     <p class="muted" id="pg-text"></p>
     <div class="pg-btns" id="pg-btns" hidden>
-      <button type="button" class="btn primary" id="pg-again">もう一度印刷画面を出す</button>
+      <button type="button" class="btn primary" id="pg-again">印刷画面を開く</button>
+      <button type="button" class="btn" id="pg-share" hidden>PDFで印刷（共有 → プリント）</button>
       <button type="button" class="btn" id="pg-close">閉じる</button>
     </div>
   </div>
@@ -71,6 +72,6 @@
 <div id="print-root" aria-hidden="true"></div>
 
 <script src="lib/pdfjs/pdf.min.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/app.js?v=20261109a"></script>
 </body>
 </html>

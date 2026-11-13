@@ -34,6 +34,8 @@
   }
   #hint.off { opacity: 0; }
 
+  #bar, #bar * { touch-action: none; }
+  html, body { touch-action: none; }
   #bar {
     position: fixed;
     top: calc(env(safe-area-inset-top, 0px) + 10px);

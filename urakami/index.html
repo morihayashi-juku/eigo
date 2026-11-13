@@ -135,7 +135,7 @@
   var W = 0, H = 0, dpr = 1;
 
   var SIZES = [1.5, 3, 6, 12];
-  var state = { color: '#1b1b1b', sizeIdx: 2, eraser: false, grid: false, finger: false };
+  var state = { color: '#1b1b1b', sizeIdx: 1, eraser: false, grid: false, finger: false };
   var strokes = [];
   var cleared = null;
   var lastErase = null;
@@ -149,7 +149,7 @@
 
   // ---- 保存の読み込み ----
   try {
-    var p = JSON.parse(lsGet('urakami.prefs') || 'null');
+    var p = JSON.parse(lsGet('urakami.prefs2') || 'null');
     if (p) {
       if (typeof p.color === 'string') state.color = p.color;
       if (p.sizeIdx >= 0 && p.sizeIdx < SIZES.length) state.sizeIdx = p.sizeIdx;
@@ -160,7 +160,7 @@
   } catch (e) { strokes = []; }
 
   function savePrefs() {
-    lsSet('urakami.prefs', JSON.stringify({ color: state.color, sizeIdx: state.sizeIdx, grid: state.grid }));
+    lsSet('urakami.prefs2', JSON.stringify({ color: state.color, sizeIdx: state.sizeIdx, grid: state.grid }));
   }
   function saveStrokes() {
     var s = JSON.stringify(strokes, function (k, v) {

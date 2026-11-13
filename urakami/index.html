@@ -26,6 +26,7 @@
     background-size: 32px 32px;
   }
   canvas { position: absolute; inset: 0; display: block; touch-action: none; }
+  #t { pointer-events: none; }
   #hint {
     position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
     color: rgba(0, 0, 0, .12); font-size: 44px; letter-spacing: .15em;
@@ -75,6 +76,7 @@
 <body>
 <div id="paper"></div>
 <canvas id="c"></canvas>
+<canvas id="t"></canvas>
 <div id="hint">ここに書く</div>
 
 <div id="bar">
@@ -101,6 +103,8 @@
 (function () {
   var cv = document.getElementById('c');
   var ctx = cv.getContext('2d');
+  var tv = document.getElementById('t');
+  var tctx = tv.getContext('2d');
   var paper = document.getElementById('paper');
   var hint = document.getElementById('hint');
   var bar = document.getElementById('bar');
@@ -140,10 +144,12 @@
 
   // ---- 描画 ----
   function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 3);
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
     W = window.innerWidth; H = window.innerHeight;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
     cv.style.width = W + 'px'; cv.style.height = H + 'px';
+    tv.width = cv.width; tv.height = cv.height;
+    tv.style.width = W + 'px'; tv.style.height = H + 'px';
     redraw();
   }
   function mid(a, b) { return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; }
@@ -187,6 +193,26 @@
     hint.classList.toggle('off', strokes.length > 0 || !!cur);
   }
 
+  // ペン先の「いま」まで線をのばす（確定した線は中点までしか描かないため、遅れて見えるのを防ぐ）
+  function drawTail(s, extra) {
+    tctx.setTransform(1, 0, 0, 1, 0, 0);
+    tctx.clearRect(0, 0, tv.width, tv.height);
+    if (s.eraser) return;
+    var p = s.pts, n = p.length;
+    tctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    tctx.strokeStyle = s.color; tctx.lineCap = 'round'; tctx.lineJoin = 'round';
+    tctx.lineWidth = lw(s, p[n - 1][2]);
+    var a = n >= 2 ? mid(p[n - 2], p[n - 1]) : p[0];
+    tctx.beginPath(); tctx.moveTo(a[0], a[1]);
+    tctx.lineTo(p[n - 1][0], p[n - 1][1]);
+    for (var i = 0; i < extra.length; i++) tctx.lineTo(extra[i][0], extra[i][1]);
+    tctx.stroke();
+  }
+  function clearTail() {
+    tctx.setTransform(1, 0, 0, 1, 0, 0);
+    tctx.clearRect(0, 0, tv.width, tv.height);
+  }
+
   // ---- ペン入力 ----
   function pt(e) {
     return [e.clientX, e.clientY, e.pointerType === 'pen' ? (e.pressure || 0.5) : 0.5];
@@ -205,6 +231,7 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     bar.classList.remove('open');
     hint.classList.add('off');
+    drawTail(cur.s, []);
   });
   cv.addEventListener('pointermove', function (e) {
     if (!cur || e.pointerId !== cur.id) return;
@@ -220,11 +247,16 @@
       s.pts.push(q);
       seg(s, s.pts.length - 1);
     }
+    var pr = (e.getPredictedEvents && e.getPredictedEvents()) || [];
+    var extra = [];
+    for (var j = 0; j < pr.length && j < 3; j++) extra.push(pt(pr[j]));
+    drawTail(s, extra);
   });
   function endStroke(e) {
     if (!cur || e.pointerId !== cur.id) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     finish(cur.s);
+    clearTail();
     strokes.push(cur.s);
     cur = null;
     saveStrokes();

@@ -106,8 +106,8 @@
   var bar = document.getElementById('bar');
   var W = 0, H = 0, dpr = 1;
 
-  var SIZES = [3, 6, 12];
-  var state = { color: '#1b1b1b', sizeIdx: 1, eraser: false, grid: false, finger: true };
+  var SIZES = [1.5, 3, 6, 12];
+  var state = { color: '#1b1b1b', sizeIdx: 2, eraser: false, grid: false, finger: true };
   var strokes = [];
   var cleared = null;
   var cur = null;
@@ -249,7 +249,7 @@
     swatches.forEach(function (b) {
       b.classList.toggle('on', !state.eraser && b.getAttribute('data-color') === state.color);
     });
-    var d = 6 + state.sizeIdx * 5;
+    var d = 5 + state.sizeIdx * 4;
     var dot = sizeBtn.querySelector('i');
     dot.style.width = d + 'px'; dot.style.height = d + 'px';
     eraserBtn.classList.toggle('on', state.eraser);

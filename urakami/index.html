@@ -72,12 +72,14 @@
   #size i { display: inline-block; border-radius: 50%; background: #333; vertical-align: middle; }
   #trash {
     position: fixed; z-index: 9;
-    right: calc(env(safe-area-inset-right, 0px) + 8px);
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
-    min-width: 56px; height: 46px; padding: 0 14px; border: 0; border-radius: 23px;
+    right: calc(env(safe-area-inset-right, 0px) + 14px);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+    touch-action: none;
+    min-width: 72px; height: 56px; padding: 0 18px; border: 0; border-radius: 28px;
     background: rgba(0, 0, 0, .07); color: rgba(0, 0, 0, .5);
     font-size: 13px; font-family: inherit;
   }
+  #trash:active { background: rgba(0, 0, 0, .2); }
   #trash.arm { background: #d93025; color: #fff; font-weight: 700; }
   #note {
     position: fixed; z-index: 11; left: 50%; transform: translateX(-50%);
@@ -404,8 +406,8 @@
     clearTimeout(trashTimer); trashTimer = null;
   }
   var trashType = '';
-  trashBtn.addEventListener('pointerdown', function (e) { trashType = e.pointerType; });
-  trashBtn.addEventListener('click', function () {
+  var trashDown = false;
+  function trashAction() {
     if (trashType === 'touch' && !state.finger) return;
     if (!trashTimer) {
       trashBtn.classList.add('arm'); trashBtn.textContent = 'ほんとに？';
@@ -414,9 +416,22 @@
     }
     disarm();
     if (strokes.length) { cleared = strokes; }
+    lastErase = null;
     strokes = []; redraw(); saveStrokes();
     bar.classList.remove('open');
+  }
+  // click ではなく pointerup で反応させる（ペンの軽いタップでも確実に拾うため）
+  trashBtn.addEventListener('pointerdown', function (e) {
+    trashType = e.pointerType; trashDown = true;
+    e.preventDefault(); e.stopPropagation();
   });
+  trashBtn.addEventListener('pointerup', function (e) {
+    if (!trashDown) return;
+    trashDown = false;
+    e.preventDefault();
+    trashAction();
+  });
+  trashBtn.addEventListener('pointercancel', function () { trashDown = false; });
 
   fsBtn.addEventListener('click', function () {
     var el = document.documentElement;

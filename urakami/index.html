@@ -451,6 +451,23 @@
   document.getElementById('open').addEventListener('click', function () { bar.classList.add('open'); });
   document.getElementById('close').addEventListener('click', function () { bar.classList.remove('open'); disarm(); });
 
+  // ツールバーのボタンも、ペンを離した瞬間に反応させる（軽いタップでも確実に拾うため）
+  var barDown = null;
+  bar.addEventListener('click', function (e) {
+    if (!e.isTrusted) return;
+    e.stopImmediatePropagation(); e.preventDefault();
+  }, true);
+  bar.addEventListener('pointerdown', function (e) {
+    var b = e.target.closest && e.target.closest('button');
+    barDown = b || null;
+    if (b) e.preventDefault();
+  });
+  bar.addEventListener('pointerup', function (e) {
+    var b = e.target.closest && e.target.closest('button');
+    if (b && b === barDown) { barDown = null; e.preventDefault(); b.click(); }
+  });
+  bar.addEventListener('pointercancel', function () { barDown = null; });
+
   window.addEventListener('resize', resize);
   window.addEventListener('orientationchange', function () { setTimeout(resize, 200); });
   syncUI();

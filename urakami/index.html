@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="裏紙">
 <meta name="theme-color" content="#fdfcf7">
 <meta name="robots" content="noindex">
+<meta name="app-version" content="20261113-2230">
 <style>
   html, body {
     margin: 0; height: 100%; overflow: hidden; background: #fdfcf7;
@@ -472,6 +473,25 @@
 
   window.addEventListener('resize', resize);
   window.addEventListener('orientationchange', function () { setTimeout(resize, 200); });
+  // ---- 自動で更新（開き直したとき・Cmd+R で、新しい版があれば読みこみ直す） ----
+  var VER = (document.querySelector('meta[name="app-version"]') || {}).content || '';
+  function checkUpdate(force) {
+    if (cur) return;
+    fetch(location.pathname, { cache: 'reload' }).then(function (r) { return r.text(); }).then(function (t) {
+      var m = t.match(/name="app-version" content="([^"]+)"/);
+      var seen = ''; try { seen = sessionStorage.getItem('urakami.reloaded') || ''; } catch (e) {}
+      if (m && m[1] !== VER && m[1] !== seen) {
+        try { sessionStorage.setItem('urakami.reloaded', m[1]); } catch (e) {}
+        location.reload();
+      } else if (force) { location.reload(); }
+    }).catch(function () { if (force) location.reload(); });
+  }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) checkUpdate(false); });
+  document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && (e.key === 'r' || e.key === 'R')) { e.preventDefault(); checkUpdate(true); }
+  });
+  checkUpdate(false);
+
   syncUI();
   resize();
 })();

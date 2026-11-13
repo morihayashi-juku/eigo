@@ -70,7 +70,26 @@
   #tools .sw.on i { border-color: #fff; box-shadow: 0 0 0 2.5px currentColor; }
   #tools .sep { width: 1px; height: 22px; background: rgba(0, 0, 0, .15); margin: 0 4px; }
   #size i { display: inline-block; border-radius: 50%; background: #333; vertical-align: middle; }
+  #trash {
+    position: fixed; z-index: 9;
+    right: calc(env(safe-area-inset-right, 0px) + 8px);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+    min-width: 56px; height: 46px; padding: 0 14px; border: 0; border-radius: 23px;
+    background: rgba(0, 0, 0, .07); color: rgba(0, 0, 0, .5);
+    font-size: 13px; font-family: inherit;
+  }
   #trash.arm { background: #d93025; color: #fff; font-weight: 700; }
+  #note {
+    position: fixed; z-index: 11; left: 50%; transform: translateX(-50%);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+    background: rgba(40, 40, 40, .92); color: #fff; font-size: 14px;
+    padding: 8px 8px 8px 16px; border-radius: 24px;
+  }
+  #note[hidden] { display: none; }
+  #note button {
+    margin-left: 8px; border: 0; border-radius: 18px; height: 36px; padding: 0 14px;
+    background: #fff; color: #222; font-size: 14px; font-family: inherit;
+  }
 </style>
 </head>
 <body>
@@ -90,14 +109,15 @@
     <button id="eraser">消しゴム</button>
     <span class="sep"></span>
     <button id="undo">戻す</button>
-    <button id="trash">捨てる</button>
     <span class="sep"></span>
     <button id="grid">方眼</button>
-    <button id="finger">指</button>
     <button id="fs">全画面</button>
     <button id="close" aria-label="閉じる">✕</button>
   </div>
 </div>
+
+<button id="trash">捨てる</button>
+<div id="note" hidden>ペンとして認識されていません <button id="allowFinger">指でも書けるようにする</button></div>
 
 <script>
 (function () {
@@ -111,12 +131,14 @@
   var W = 0, H = 0, dpr = 1;
 
   var SIZES = [1.5, 3, 6, 12];
-  var state = { color: '#1b1b1b', sizeIdx: 2, eraser: false, grid: false, finger: true };
+  var state = { color: '#1b1b1b', sizeIdx: 2, eraser: false, grid: false, finger: false };
   var strokes = [];
   var cleared = null;
   var lastErase = null;
   var cur = null;
   var penSeen = false;
+  var blocked = 0;
+  var note = document.getElementById('note');
 
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -266,9 +288,13 @@
     return [e.clientX, e.clientY, e.pointerType === 'pen' ? (e.pressure || 0.5) : 0.5];
   }
   cv.addEventListener('pointerdown', function (e) {
-    if (e.pointerType === 'pen' && !penSeen) { penSeen = true; state.finger = false; syncUI(); }
+    if (e.pointerType === 'pen' && !penSeen) { penSeen = true; state.finger = false; note.hidden = true; }
     if (cur) return;
-    if (e.pointerType === 'touch' && !state.finger) return;
+    if (e.pointerType === 'touch' && !state.finger) {
+      blocked++;
+      if (!penSeen && blocked >= 3) note.hidden = false;
+      return;
+    }
     e.preventDefault();
     try { cv.setPointerCapture(e.pointerId); } catch (x) {}
     cleared = null;
@@ -331,7 +357,6 @@
   var eraserBtn = document.getElementById('eraser');
   var trashBtn = document.getElementById('trash');
   var gridBtn = document.getElementById('grid');
-  var fingerBtn = document.getElementById('finger');
   var fsBtn = document.getElementById('fs');
   var trashTimer = null;
 
@@ -346,8 +371,6 @@
     gridBtn.classList.toggle('on', state.grid);
     gridBtn.textContent = state.grid ? '方眼 ON' : '方眼';
     paper.classList.toggle('grid', state.grid);
-    fingerBtn.textContent = state.finger ? '指 OK' : '指 ×';
-    fingerBtn.classList.toggle('on', state.finger);
   }
 
   swatches.forEach(function (b) {
@@ -361,7 +384,9 @@
   });
   eraserBtn.addEventListener('click', function () { state.eraser = !state.eraser; syncUI(); });
   gridBtn.addEventListener('click', function () { state.grid = !state.grid; syncUI(); savePrefs(); });
-  fingerBtn.addEventListener('click', function () { state.finger = !state.finger; syncUI(); });
+  document.getElementById('allowFinger').addEventListener('click', function () {
+    state.finger = true; note.hidden = true;
+  });
 
   document.getElementById('undo').addEventListener('click', function () {
     if (cur) return;
@@ -378,7 +403,10 @@
     trashBtn.classList.remove('arm'); trashBtn.textContent = '捨てる';
     clearTimeout(trashTimer); trashTimer = null;
   }
+  var trashType = '';
+  trashBtn.addEventListener('pointerdown', function (e) { trashType = e.pointerType; });
   trashBtn.addEventListener('click', function () {
+    if (trashType === 'touch' && !state.finger) return;
     if (!trashTimer) {
       trashBtn.classList.add('arm'); trashBtn.textContent = 'ほんとに？';
       trashTimer = setTimeout(disarm, 2500);

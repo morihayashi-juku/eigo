@@ -114,6 +114,7 @@
   var state = { color: '#1b1b1b', sizeIdx: 2, eraser: false, grid: false, finger: true };
   var strokes = [];
   var cleared = null;
+  var lastErase = null;
   var cur = null;
   var penSeen = false;
 
@@ -213,6 +214,53 @@
     tctx.clearRect(0, 0, tv.width, tv.height);
   }
 
+  // ---- ぐしゃぐしゃ消し（往復して塗りつぶすと、その下の字が消える） ----
+  function reversals(p, ax, extent) {
+    if (extent < 20) return 0;
+    var T = Math.max(8, extent * 0.2);
+    var dir = 0, ext = p[0][ax], rev = 0;
+    for (var i = 1; i < p.length; i++) {
+      var v = p[i][ax];
+      if (dir === 0) {
+        if (v - ext >= T) { dir = 1; ext = v; }
+        else if (ext - v >= T) { dir = -1; ext = v; }
+      } else if (dir === 1) {
+        if (v > ext) ext = v;
+        else if (ext - v >= T) { dir = -1; ext = v; rev++; }
+      } else {
+        if (v < ext) ext = v;
+        else if (v - ext >= T) { dir = 1; ext = v; rev++; }
+      }
+    }
+    return rev;
+  }
+  function scribbleBox(s) {
+    var p = s.pts;
+    if (s.eraser || p.length < 12) return null;
+    var minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9, len = 0;
+    for (var i = 0; i < p.length; i++) {
+      if (p[i][0] < minx) minx = p[i][0]; if (p[i][0] > maxx) maxx = p[i][0];
+      if (p[i][1] < miny) miny = p[i][1]; if (p[i][1] > maxy) maxy = p[i][1];
+      if (i) len += Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]);
+    }
+    var w = maxx - minx, h = maxy - miny, diag = Math.hypot(w, h);
+    if (diag < 30 || len < diag * 2.5) return null;
+    var r = Math.max(reversals(p, 0, w), reversals(p, 1, h));
+    if (r < 4) return null;
+    return { x1: minx - 10, x2: maxx + 10, y1: miny - 10, y2: maxy + 10 };
+  }
+  function scribbleHits(box) {
+    var hits = [];
+    for (var i = 0; i < strokes.length; i++) {
+      var q = strokes[i].pts, inside = 0;
+      for (var j = 0; j < q.length; j++) {
+        if (q[j][0] >= box.x1 && q[j][0] <= box.x2 && q[j][1] >= box.y1 && q[j][1] <= box.y2) inside++;
+      }
+      if (inside / q.length >= 0.4) hits.push(i);
+    }
+    return hits;
+  }
+
   // ---- ペン入力 ----
   function pt(e) {
     return [e.clientX, e.clientY, e.pointerType === 'pen' ? (e.pressure || 0.5) : 0.5];
@@ -224,6 +272,7 @@
     e.preventDefault();
     try { cv.setPointerCapture(e.pointerId); } catch (x) {}
     cleared = null;
+    lastErase = null;
     cur = {
       id: e.pointerId,
       s: { color: state.color, w: SIZES[state.sizeIdx], eraser: state.eraser, pts: [pt(e)] }
@@ -257,8 +306,17 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     finish(cur.s);
     clearTail();
-    strokes.push(cur.s);
+    var done = cur.s;
     cur = null;
+    var box = scribbleBox(done);
+    var hits = box ? scribbleHits(box) : [];
+    if (hits.length) {
+      lastErase = hits.map(function (i) { return { i: i, s: strokes[i] }; });
+      strokes = strokes.filter(function (st, i) { return hits.indexOf(i) < 0; });
+      redraw(); saveStrokes();
+      return;
+    }
+    strokes.push(done);
     saveStrokes();
   }
   cv.addEventListener('pointerup', endStroke);
@@ -307,7 +365,11 @@
 
   document.getElementById('undo').addEventListener('click', function () {
     if (cur) return;
-    if (strokes.length) { strokes.pop(); }
+    if (lastErase) {
+      lastErase.forEach(function (h) { strokes.splice(h.i, 0, h.s); });
+      lastErase = null;
+    }
+    else if (strokes.length) { strokes.pop(); }
     else if (cleared) { strokes = cleared; cleared = null; }
     redraw(); saveStrokes();
   });

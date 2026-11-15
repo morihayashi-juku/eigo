@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="裏紙">
 <meta name="theme-color" content="#fdfcf7">
 <meta name="robots" content="noindex">
-<meta name="app-version" content="20261113-2300">
+<meta name="app-version" content="20261115-2400">
 <style>
   html, body {
     margin: 0; height: 100%; overflow: hidden; background: #fdfcf7;
@@ -116,6 +116,7 @@
     <button id="undo">戻す</button>
     <span class="sep"></span>
     <button id="grid">方眼</button>
+    <button id="blur">ぼかし</button>
     <button id="fs">全画面</button>
     <button id="close" aria-label="閉じる">✕</button>
   </div>
@@ -136,7 +137,9 @@
   var W = 0, H = 0, dpr = 1;
 
   var SIZES = [1.5, 3, 6, 12];
-  var state = { color: '#1b1b1b', sizeIdx: 1, eraser: false, grid: false, finger: false };
+  var BLURS = [0, 0.4, 0.8];
+  var BLUR_NAMES = ['なし', '弱', '中'];
+  var state = { color: '#1b1b1b', sizeIdx: 1, eraser: false, grid: false, blur: 1, finger: false };
   var strokes = [];
   var cleared = null;
   var lastErase = null;
@@ -155,13 +158,14 @@
       if (typeof p.color === 'string') state.color = p.color;
       if (p.sizeIdx >= 0 && p.sizeIdx < SIZES.length) state.sizeIdx = p.sizeIdx;
       state.grid = !!p.grid;
+      if (p.blur >= 0 && p.blur < BLURS.length) state.blur = p.blur;
     }
     var sv = JSON.parse(lsGet('urakami.strokes') || 'null');
     if (Array.isArray(sv)) strokes = sv;
   } catch (e) { strokes = []; }
 
   function savePrefs() {
-    lsSet('urakami.prefs2', JSON.stringify({ color: state.color, sizeIdx: state.sizeIdx, grid: state.grid }));
+    lsSet('urakami.prefs2', JSON.stringify({ color: state.color, sizeIdx: state.sizeIdx, grid: state.grid, blur: state.blur }));
   }
   function saveStrokes() {
     var s = JSON.stringify(strokes, function (k, v) {
@@ -409,6 +413,7 @@
   var eraserBtn = document.getElementById('eraser');
   var trashBtn = document.getElementById('trash');
   var gridBtn = document.getElementById('grid');
+  var blurBtn = document.getElementById('blur');
   var fsBtn = document.getElementById('fs');
   var trashTimer = null;
 
@@ -423,6 +428,9 @@
     gridBtn.classList.toggle('on', state.grid);
     gridBtn.textContent = state.grid ? '方眼 ON' : '方眼';
     paper.classList.toggle('grid', state.grid);
+    var bl = BLURS[state.blur];
+    cv.style.filter = tv.style.filter = bl ? 'blur(' + bl + 'px)' : 'none';
+    blurBtn.textContent = 'ぼかし ' + BLUR_NAMES[state.blur];
   }
 
   swatches.forEach(function (b) {
@@ -435,6 +443,9 @@
     state.sizeIdx = (state.sizeIdx + 1) % SIZES.length; syncUI(); savePrefs();
   });
   eraserBtn.addEventListener('click', function () { state.eraser = !state.eraser; syncUI(); });
+  blurBtn.addEventListener('click', function () {
+    state.blur = (state.blur + 1) % BLURS.length; syncUI(); savePrefs();
+  });
   gridBtn.addEventListener('click', function () { state.grid = !state.grid; syncUI(); savePrefs(); });
   document.getElementById('allowFinger').addEventListener('click', function () {
     state.finger = true; note.hidden = true;

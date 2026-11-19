@@ -32,7 +32,6 @@
     "gimon"
    ],
    "title": "be動詞・一般動詞の否定文と疑問文",
-   "cur": true,
    "note": "見分け → be動詞の否定・疑問 → do/does → どっち？否定 → どっち？疑問 → まちがい直し の6ページ。",
    "groups": [
     {
@@ -76,6 +75,65 @@
        "file": "n01_hitei_gimon_answers.pdf",
        "title": "授業プリントのこたえ",
        "pages": 6,
+       "copies": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "n02",
+   "label": "②",
+   "units": [
+    "miwake",
+    "hitei",
+    "gimon"
+   ],
+   "title": "否定文と疑問文の復習（n01 の定着）",
+   "cur": true,
+   "note": "作り分け → 答え方 → まちがい直し・ならべかえ → 日本語を英語に の4ページ。問題はすべて n01 と別の文。",
+   "groups": [
+    {
+     "kind": "thu",
+     "label": "木曜（授業）",
+     "items": [
+      {
+       "file": "n02_fukushu.pdf",
+       "title": "授業プリント",
+       "pages": 4,
+       "note": "否定・疑問 復習1〜4",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "hw",
+     "label": "宿題（金〜水）",
+     "items": [
+      {
+       "file": "n02_homework.pdf",
+       "title": "宿題（6日分）",
+       "pages": 3,
+       "note": "A4 1枚に2日分。答えは自学ノートに",
+       "copies": 1
+      },
+      {
+       "file": "n02_homework_answers.pdf",
+       "title": "宿題のこたえ",
+       "pages": 3,
+       "note": "本人に渡して毎日丸つけ",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "teacher",
+     "label": "先生用",
+     "items": [
+      {
+       "file": "n02_fukushu_answers.pdf",
+       "title": "授業プリントのこたえ",
+       "pages": 4,
        "copies": 1
       }
      ]

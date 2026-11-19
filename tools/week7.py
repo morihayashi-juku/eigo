@@ -8,7 +8,7 @@
 """
 import sys
 
-from eigolib import (S, DONT, cn, esc, fix_list, header, html_doc, judge_table, meaning_list,
+from eigolib import (READ, S, DONT, cn, esc, fix_list, header, html_doc, judge_table, meaning_list,
                      mini_quiz, opt, point_box, rb, reading, sec, shuffled, stop_box, word_table,
                      card_list, choose_list, write_pdfs)
 
@@ -264,9 +264,96 @@ def review_page():
     return [f'<div class="page mon">{a}<div class="cut"><span>きりとり</span></div>{b}</div>']
 
 
+
+# ---------------------------------------------------------------- 宿題（金〜水の6日分・1日半ページ・A4 3枚）
+# 2人の宿題の決まり（11/19 決定）：毎日5分。プリントに直接書く。先生が回収して丸つけ（こたえは先生用だけ）。
+HW_CSS = """<style>
+.hw { --c: #a35d0b; --soft: #fbefdc; }
+.day { border: 1.6px solid var(--c); border-radius: 3mm; padding: 3mm 4mm 3.4mm; display: flex; flex-direction: column; gap: 2.4mm; flex: 1; }
+.day + .day { margin-top: 1mm; }
+.dayhd { display: flex; align-items: center; gap: 3mm; }
+.dayhd .dn { background: var(--c); color: #fff; font-weight: 900; border-radius: 99px; padding: .3mm 4mm; font-size: 10.5pt; }
+.dayhd .dd { font-size: 9pt; }
+.dayhd .ok { margin-left: auto; font-size: 9pt; }
+.hwrow { display: grid; grid-template-columns: 6mm 26mm 22mm 1fr; align-items: center; column-gap: 2mm; font-size: 9.6pt; min-height: 8mm; }
+.hwrow .word { font-size: 14pt; }
+.wq { display: grid; grid-template-columns: 6mm 1fr 46mm; align-items: center; column-gap: 2mm; font-size: 9.6pt; min-height: 8mm; }
+.hwsec { font-weight: 700; font-size: 9.6pt; display: flex; gap: 2mm; align-items: baseline; }
+.hwsec .k { color: var(--c); }
+.hwsec .s { font-size: 7.8pt; color: #5d6670; font-weight: 400; }
+.hwmq { display: grid; grid-template-columns: 6mm 58mm 1fr; column-gap: 2mm; align-items: center; font-size: 9.4pt; min-height: 10mm; }
+.hwmq .en { font-size: 13pt; }
+</style>"""
+ALL_MEAN = [m for _, m in WORDS]
+DAYS = [  # (曜日, 単語3つ, 見分け3つ, ("choose"|"mean", 2つ))
+    ("金", ["like", "busy", "cook"], ["want_milk_i", "sleepy_she", "like_tennis_you"], ("choose", ["busy_he", "want_pen_i"])),
+    ("土", ["want", "sleepy", "swim"], ["happy_i", "like_baseball_i", "cook_you"], ("choose", ["like_music_you", "tall_you"])),
+    ("日", ["happy", "kind", "like"], ["want_water_you", "busy_you", "kind_he"], ("choose", ["sleepy_i", "want_book_i"])),
+    ("月", ["busy", "want", "swim"], ["like_curry_i", "happy_he", "swim_i"], ("mean", ["want_comp_you", "sleepy_she"])),
+    ("火", ["sleepy", "cook", "kind"], ["want_bag_you", "tall_he", "like_english_you"], ("mean", ["busy_he", "like_ramen_i"])),
+    ("水", ["happy", "like", "want"], ["sleepy_i", "want_pen_i", "like_music_you"], ("mean", ["happy_i", "want_water_you"])),
+]
+
+
+def hw_words(ws, seed):
+    mean = dict(WORDS)
+    out = ""
+    for i, w in enumerate(ws, 1):
+        others = [m for m in ALL_MEAN if m != mean[w]]
+        ch = shuffled(others, f"{seed}{w}")[:2]
+        ch.insert((i + len(seed)) % 3, mean[w])
+        cells = " ／ ".join(opt(m, m == mean[w]) for m in ch)
+        out += (f'<div class="hwrow">{cn(i)}<span class="word">{esc(w)}</span><span>{READ[w.lower()]}</span>'
+                f'<span class="par">（ {cells} ）</span></div>')
+    return out
+
+
+def hw_which(items):
+    return "".join(
+        f'<div class="wq">{cn(i)}<span>{esc(x.jp)}</span>'
+        f'<span class="par">（ {opt("be＋not", x.kind == "be")} ／ {opt(DONT, x.kind == "do")} ）</span></div>'
+        for i, x in enumerate(items, 1))
+
+
+def hw_mean(items, seed):
+    out = ""
+    for i, x in enumerate(items, 1):
+        a, b = (x.jp, x.pos_jp) if (i + len(seed)) % 2 else (x.pos_jp, x.jp)
+        out += (f'<div class="hwmq">{cn(i)}{rb(x.en)}<span>{opt("ア", a == x.jp)} {esc(a)}<br>{opt("イ", b == x.jp)} {esc(b)}</span></div>')
+    return out
+
+
+def hw_day(n, day):
+    dow, ws, which, (kind, last) = day
+    if kind == "choose":
+        third = (f'<div class="hwsec"><span class="k">③</span>日本語に合うほうを ○ でかこもう'
+                 f'<span class="s">先に（be・一般）を ○</span></div>' + choose_list(L(*last), f"hw{n}").replace(
+                     '<div class="small">先に（be・一般）を ○ してから、答えを ○。両方合って1点。</div>', ""))
+    else:
+        third = (f'<div class="hwsec"><span class="k">③</span>英文を読んで、意味はどっち？ ア・イ を ○'
+                 f'<span class="s">not・don\'t の意味に気をつけよう</span></div>' + hw_mean(L(*last), f"hw{n}"))
+    return f"""<div class="day">
+<div class="dayhd"><span class="dn">{n}日目（{dow}）</span><span class="dd">やった日　　月　　日</span><span class="ok">□ できた（5分）</span></div>
+<div class="hwsec"><span class="k">①</span>単語：声に出して読んで、意味を ○ でかこもう</div>
+<div>{hw_words(ws, f"d{n}")}</div>
+<div class="hwsec"><span class="k">②</span>否定文にするとき、どっちを使う？ ○ でかこもう<span class="s">「好き」「ほしい」は don't！</span></div>
+<div>{hw_which(L(*which))}</div>
+{third}
+</div>"""
+
+
+def homework_pages():
+    pages = []
+    for k in range(3):
+        a, b = DAYS[2 * k], DAYS[2 * k + 1]
+        hd = header("thu", "宿題", W, "単元② 否定文", f"{k + 1}枚目（{a[0]}・{b[0]}）　1日5分・月曜と木曜に持ってこよう", TITLE, dow="　")
+        pages.append(f'<div class="page hw">{HW_CSS if k == 0 else ""}{hd}{hw_day(2 * k + 1, a)}{hw_day(2 * k + 2, b)}</div>')
+    return pages
+
 # ---------------------------------------------------------------- 書き出し
 def main():
     les, quiz, ma, mb, rev = lesson_pages(), thu_quiz_page(), mon_pages("A"), mon_pages("B"), review_page()
+    hw = homework_pages()
     f = lambda n: f"w{W}_{n}.pdf"
     jobs = {
         f("1_Thu_lesson"): html_doc(les),
@@ -275,6 +362,8 @@ def main():
         f("4_Mon_selfstudy_B"): html_doc(mb),
         f("5_Mon_review_quiz_AB"): html_doc(rev),
         f("6_answers"): html_doc(les + quiz + ma + mb + rev, answers=True),
+        f("7_homework"): html_doc(hw),
+        f("8_homework_answers"): html_doc(hw, answers=True),
     }
     write_pdfs(jobs, keep_html="--html" in sys.argv)
 

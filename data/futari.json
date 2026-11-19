@@ -644,6 +644,19 @@
      ]
     },
     {
+     "kind": "hw",
+     "label": "宿題（金〜水）",
+     "items": [
+      {
+       "file": "w7_7_homework.pdf",
+       "title": "宿題（6日分）",
+       "pages": 3,
+       "note": "1人1部・1日5分・プリントに直接書く。月曜と木曜に回収",
+       "copies": 2
+      }
+     ]
+    },
+    {
      "kind": "teacher",
      "label": "先生用",
      "items": [
@@ -652,6 +665,13 @@
        "title": "こたえ",
        "pages": 22,
        "note": "木曜→小テスト→月曜A→月曜B→ふくしゅうの順",
+       "copies": 1
+      },
+      {
+       "file": "w7_8_homework_answers.pdf",
+       "title": "宿題のこたえ",
+       "pages": 3,
+       "note": "先生用（生徒には渡さない）",
        "copies": 1
       }
      ]

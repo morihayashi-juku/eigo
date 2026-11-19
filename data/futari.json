@@ -575,6 +575,87 @@
       }
      ]
     }
+   ]
+  },
+  {
+   "id": "7",
+   "label": "7週目",
+   "units": [
+    "hitei"
+   ],
+   "title": "好き・ほしいをもう一度",
+   "words": [
+    "like",
+    "want",
+    "busy",
+    "sleepy",
+    "happy",
+    "kind",
+    "cook",
+    "swim"
+   ],
+   "note": "6週目でも「好きではありません・ほしくありません」に be＋not を使うまちがいが残ったので、同じ型でもう1週。新しい単語はなし。「〜くありません」（いそがしく・ねむく・うれしく・背が高く）を多めにして「ほしくありません」とくらべる。",
+   "groups": [
+    {
+     "kind": "thu",
+     "label": "木曜（授業）",
+     "items": [
+      {
+       "file": "w7_1_Thu_lesson.pdf",
+       "title": "授業プリント",
+       "pages": 4,
+       "note": "2部・2人とも同じ",
+       "copies": 2
+      },
+      {
+       "file": "w7_2_Thu_quiz.pdf",
+       "title": "ラスト5分の小テスト",
+       "pages": 1,
+       "note": "上下2人分を1枚",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "mon",
+     "label": "月曜（自習）",
+     "items": [
+      {
+       "file": "w7_3_Mon_selfstudy_A.pdf",
+       "title": "自習 パターンA",
+       "pages": 8,
+       "note": "じっくり版・50点",
+       "copies": 1
+      },
+      {
+       "file": "w7_4_Mon_selfstudy_B.pdf",
+       "title": "自習 パターンB",
+       "pages": 8,
+       "note": "じっくり版・50点",
+       "copies": 1
+      },
+      {
+       "file": "w7_5_Mon_review_quiz_AB.pdf",
+       "title": "ふくしゅう小テスト",
+       "pages": 1,
+       "note": "上A・下B。8週目の木曜のはじめにやる",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "teacher",
+     "label": "先生用",
+     "items": [
+      {
+       "file": "w7_6_answers.pdf",
+       "title": "こたえ",
+       "pages": 22,
+       "note": "木曜→小テスト→月曜A→月曜B→ふくしゅうの順",
+       "copies": 1
+      }
+     ]
+    }
    ],
    "cur": true
   }

@@ -676,6 +676,107 @@
       }
      ]
     }
+   ]
+  },
+  {
+   "id": "8",
+   "label": "8週目",
+   "units": [
+    "hitei"
+   ],
+   "title": "好き・ほしいは 動詞グループ",
+   "words": [
+    "like",
+    "want",
+    "cook",
+    "swim",
+    "busy",
+    "sleepy",
+    "happy",
+    "kind"
+   ],
+   "note": "7週目でも「好きではありません・ほしくありません」のまちがいが残ったので、見方を変えた週。英語の単語を「動詞グループ（like want cook swim play）」と「ようす・ものグループ（busy sleepy happy kind tall a teacher）」に分け、日本語の中のカギの単語のグループで be＋not／don't を決める。新しい単語はなし。",
+   "groups": [
+    {
+     "kind": "thu",
+     "label": "木曜（授業）",
+     "items": [
+      {
+       "file": "w8_1_Thu_lesson.pdf",
+       "title": "授業プリント",
+       "pages": 4,
+       "note": "2部・2人とも同じ",
+       "copies": 2
+      },
+      {
+       "file": "w8_2_Thu_quiz.pdf",
+       "title": "ラスト5分の小テスト",
+       "pages": 1,
+       "note": "上下2人分を1枚",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "mon",
+     "label": "月曜（自習）",
+     "items": [
+      {
+       "file": "w8_3_Mon_selfstudy_A.pdf",
+       "title": "自習 パターンA",
+       "pages": 8,
+       "note": "じっくり版・50点",
+       "copies": 1
+      },
+      {
+       "file": "w8_4_Mon_selfstudy_B.pdf",
+       "title": "自習 パターンB",
+       "pages": 8,
+       "note": "じっくり版・50点",
+       "copies": 1
+      },
+      {
+       "file": "w8_5_Mon_review_quiz_AB.pdf",
+       "title": "ふくしゅう小テスト",
+       "pages": 1,
+       "note": "上A・下B。9週目の木曜のはじめにやる",
+       "copies": 1
+      }
+     ]
+    },
+    {
+     "kind": "hw",
+     "label": "宿題（金〜水）",
+     "items": [
+      {
+       "file": "w8_7_homework.pdf",
+       "title": "宿題（6日分）",
+       "pages": 3,
+       "note": "1人1部・1日5分・プリントに直接書く。月曜と木曜に回収",
+       "copies": 2
+      }
+     ]
+    },
+    {
+     "kind": "teacher",
+     "label": "先生用",
+     "items": [
+      {
+       "file": "w8_6_answers.pdf",
+       "title": "こたえ",
+       "pages": 22,
+       "note": "木曜→小テスト→月曜A→月曜B→ふくしゅうの順",
+       "copies": 1
+      },
+      {
+       "file": "w8_8_homework_answers.pdf",
+       "title": "宿題のこたえ",
+       "pages": 3,
+       "note": "先生用（生徒には渡さない）",
+       "copies": 1
+      }
+     ]
+    }
    ],
    "cur": true
   }

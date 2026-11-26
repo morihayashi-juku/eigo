@@ -112,3 +112,10 @@
   次の週はいちばん新しい `week*.py` をコピーして、W・TITLE・WORDS・文のストック・問題の割り当てを書きかえて `python3 tools/week8.py` で pdf/ に出力（`--html` で確認用HTMLも tools/out/ に）。
   こたえは同じページを赤で描くので、問題とこたえがずれない。新しい英単語は `eigolib.READ` に読みを足す（無いとエラー）。
   書き出し時にページのはみ出しがあれば「!! はみ出し」と出るので、問題数か余白を調整する。
+
+## 進度ボード（kiroku/shindo）との関係（11/26 追加）
+https://morihayashi-juku.github.io/kiroku/shindo/ の「プリント進度ボード」は、このリポジトリの `data/` の JSON を**自動で読んで**、組ごとの「今ここ・今の回・これまでの回・記録」と「どのプリントをどの組が使ったか」を表示している。教材を足して push すれば、ボードにも自動で出る（ボード側の作業は要らない）。
+- ボードが読んでいるもの：`common.json` の `tracks`（なければ決まった組）・`units`／`libraries`、組の JSON の `name` `longName` `grade` `updated` `now`（`{step, text}`）`log`（`{date, text}`・新しいものを上）`checks` `sets`（`id` `label` `title` `cur` `steps`／`units` `groups[].kind` `groups[].items[].file`）。
+- **この形を変えるとき（名前を変える・入れ物を変える）は、ボードも直す必要がある**ので先生に伝える。項目を足すのは問題ない。
+- `now` と `log` を書いておくと、ボードの「今ここ」「記録」に出る。教材を足したら `log` に1行（日付とやったこと）を書くとよい。
+- ボードのはんこは、このサイトで付けたチェック（localStorage の `*-shelf`）を同じ端末で読んでいる。チェックの保存の形を変えるときも先生に伝える。
